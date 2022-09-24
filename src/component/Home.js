@@ -10,7 +10,7 @@ const library = [
     {
         img: require('../assets/vue.jpeg'),
         title: "VUE JS",
-        description: "Vue is a JavaScript framework for building user interfaces. It builds on top of standard HTML, CSS and JavaScript, and provides a declarative and component-based programming model that helps you efficiently develop user interfaces, be it simple or complex.",
+        description: "Vue builds on top of standard HTML, CSS and JavaScript, and provides a declarative and component-based programming model that helps you efficiently develop user interfaces, be it simple or complex.",
     },
     {
         img: require('../assets/angular.jpg'),
