@@ -1,58 +1,69 @@
-//SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.0 <0.9.0;
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity >=0.4.22 <0.9.0;
 
 contract Voting{
 
-    uint public ReactVote = 0;
-    uint public VueVote = 0;
-    uint public AngularVote = 0;
-
     struct Voter{
-        bool voted ;
-        uint voteIndex;
-        string optionChosen;
+        uint weight;
+        bool voted;
+        uint vote;
     }
 
-    // event WinnerFound();
+    uint public ReactVote;
+    uint public VueVote;
+    uint public AngularVote;
 
-    mapping (address=>Voter) public Voters;
+    address public chairperson;
 
-    string[] public Options=["React", "Vue", "Angular"];
+    mapping(address => Voter) public Voters;
 
-    function canVote(address voter) view public {
-        require(
-            Voters[voter].voted == false, "You Have Already Voted"
-        );
+    string[] public candidates;
+
+    constructor() public {
+        candidates =["React","Vue","Angular"];
+        chairperson = msg.sender;
+        Voters[chairperson].weight = 1;
+        ReactVote=0;
+        VueVote=0;
+        AngularVote=0;
+
     }
 
-    function finalVote(address voter, string memory option) public {
-        canVote(voter);
-        Voters[voter].optionChosen = option;
-        if(keccak256(abi.encodePacked(option)) == keccak256("React")){
+    function giveRight(address voter) public {
+        // require(msg.sender==chairperson, "Only chairperson can give right to vote");
+        require(!Voters[voter].voted, "The voter has already voted");
+        require(Voters[voter].weight==0);
+        Voters[voter].weight=1;
+    }
+
+    function vote(uint option) payable public {
+        Voter storage sender = Voters[msg.sender];
+        require(sender.weight != 0, "has no right to vote");
+        require(!sender.voted, "has already voted");
+        sender.voted=true;
+        sender.vote=option;
+        if(option==0){
             ReactVote++;
-        }else if(keccak256(abi.encodePacked(option)) == keccak256("Vue")){
+        }
+        else if (option==1) {
             VueVote++;
-        }else{
+        }
+        else{
             AngularVote++;
         }
-        !Voters[voter].voted;
     }
 
-    function Winner() public view returns(string memory){
-        if(ReactVote>VueVote && ReactVote>AngularVote){
-            return "React";
-        }else if(VueVote>ReactVote && VueVote>AngularVote){
-            return  "Vue";
-        }else{
-            return "Angular";
+    function winningCandidate() public view returns (string memory winningCandidate_){
+        if(ReactVote > VueVote && ReactVote > AngularVote){
+            winningCandidate_ = "React";
         }
-
-        // emit WinnerFound();
+        else if(VueVote > ReactVote && VueVote > AngularVote){
+            winningCandidate_ = "Vue";
+        }
+        else{
+            winningCandidate_ = "Angular";
+        }
     }
-
-    
-
-
-
 
 }
+
