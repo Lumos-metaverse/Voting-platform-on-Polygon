@@ -8,13 +8,13 @@ const library = [
         img: require('../assets/react.png'),
         title: "ReactJS",
         description: "React is a free and open-source front-end JavaScript library for building user interfaces based on UI components.",
-        myOption: "React"
+        myOption: 0
     },
     {
         img: require('../assets/vue.jpeg'),
         title: "VUE JS",
         description: "Vue builds on top of standard HTML, CSS and JavaScript, and provides a declarative and component-based programming model that helps you efficiently develop user interfaces, be it simple or complex.",
-        myOption: "Vue"
+        myOption: 1
         
 
     },
@@ -22,7 +22,7 @@ const library = [
         img: require('../assets/angular.jpg'),
         title: "Angular",
         description: "Angular is an open-source, JavaScript framework written in TypeScript. Google maintains it, and primarily used to develop single-page applications.",
-        myOption: "Angular"
+        myOption: 2
 
     },
 ]
