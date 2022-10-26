@@ -62,13 +62,15 @@ export const VotingProvider = ({children}) =>{
     const sendVote = async ( option) => {
         if(!ethereum) return alert('Please connect to a metamask wallet');
         const VotingContract = getEthereumContract();
-        VotingContract.vote(option);
+        const VoteHash = await VotingContract.vote(option);
+        console.log(VoteHash);
         
     }
 
     const getWinner = async () => {
         if(!ethereum) return alert('Please connect to a metamask wallet');
         const VotingContract =  getEthereumContract();
+        const winner = await VotingContract.getWinner();
         setWinner(VotingContract.winningCandidate());
     }
 
