@@ -10,15 +10,6 @@ const getEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const VotingContract = new ethers.Contract(VOTING_ADDRESS, VOTING_ABI, signer);
-    var rVotes= VotingContract.ReactVote();
-
-    console.log({
-        provider, 
-        signer,
-        VotingContract, 
-        rVotes
-    })
-
     return VotingContract;
 }
 
@@ -28,7 +19,7 @@ export const VotingProvider = ({children}) =>{
     const [option, setOption] = useState("");
     const [winner, setWinner] = useState("");
 
-
+   
 
 
 
@@ -48,7 +39,7 @@ export const VotingProvider = ({children}) =>{
     const givePermission = async () => {
         try {
             if(!ethereum) return alert('Please connect to a metamask wallet');
-            const VotingContract = getEthereumContract();
+            const VotingContract =  getEthereumContract();
             VotingContract.giveRight(currentAccount);
             console.log("Permission given");
             // window.location.reload();
@@ -61,32 +52,34 @@ export const VotingProvider = ({children}) =>{
 
     const sendVote = async (option) => {
         if(!ethereum) return alert('Please connect to a metamask wallet');
-        const VotingContract = getEthereumContract();
+        const VotingContract =  getEthereumContract();
         const VoteHash = await VotingContract.vote(option);
-        getWinner();
         console.log(VoteHash);
         
     }
 
     const getWinner = async () => {
-        if(!ethereum) return alert('Please connect to a metamask wallet');
-        const VotingContract =  getEthereumContract();
+        if(!ethereum) return alert('Please connect to a metamask wallet');  
+        const VotingContract =  getEthereumContract();    
         const winner = await VotingContract.winningCandidate();
         setWinner(VotingContract.winningCandidate());
         console.log(winner);
     }
 
-    const clickHandler = (title) => {
-        if(title === "ReactJS"){
-           setOption(0); 
-        }else if(title === "VUE JS"){
-            setOption(1);
-        }else if(title === "Angular"){
-            setOption(2);
-        }
-
-        sendVote(option);
+    const getReactVote = () => {
+        const VotingContract =  getEthereumContract();
+        return VotingContract.ReactVote();
     }
+
+    const getVueVote = () => {
+        const VotingContract =  getEthereumContract();
+        return VotingContract.VueVote();
+    }
+    const getAngularVote = () => {
+        const VotingContract =  getEthereumContract();
+        return VotingContract.AngularVote();
+    }
+
 
     useEffect(() => {
       
@@ -96,7 +89,7 @@ export const VotingProvider = ({children}) =>{
     
 
     return(
-        <VotingContext.Provider value={{sendVote,connectWallet,option, setOption, currentAccount, givePermission, winner, clickHandler, setWinner}}>
+        <VotingContext.Provider value={{ getReactVote, getVueVote, getAngularVote, sendVote,connectWallet,option, setOption, currentAccount, givePermission, winner, setWinner}}>
             {children}
         </VotingContext.Provider>
     )

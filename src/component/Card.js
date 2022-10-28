@@ -16,7 +16,7 @@ function Card({ img, title, description, myOption, showwinner }) {
       <h1 className='font-bold text-xl py-2'>{title}</h1>
       <p className='font-medium text-center py-2'>{description}</p>
       
-      <button className='font-bold border w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white' onClick={(e)=>{setData(myOption);console.log(myOption);showwinner(true);setWinner(myOption); sendVote(myOption)}}>Vote</button>
+      <button className='font-bold border w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white' onClick={(e)=>{setData(myOption);showwinner(true);setWinner(myOption); sendVote(myOption)}}>Vote</button>
     </div>
   )
 }

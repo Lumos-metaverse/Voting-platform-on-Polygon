@@ -28,14 +28,24 @@ const library = [
 ]
 
 function Home() {
-    const {connectWallet, currentAccount,sendVote, option, setOption, givePermission, winner} = useContext(VotingContext)
+    const {getReactVote, getVueVote, getAngularVote, connectWallet, currentAccount,sendVote, option, setOption, givePermission, winner} = useContext(VotingContext)
 
     const [showwinner, setShowwinner] = useState(false)
+    const [showPopUp, setShowPopUp] = useState(false)
+    const [showReactVotes, setShowReactVotes] = useState()
+    const [showVueVotes, setShowVueVotes] = useState()
+    const [showAngularVotes, setShowAngularVotes] = useState()
 
     const initialProcess = async () => {
         await connectWallet()
         await givePermission()
-        setShowwinner(true)
+    }
+
+    const handleVotes = async() => {
+        setShowReactVotes(await getReactVote());
+        setShowVueVotes(await getVueVote());
+        setShowAngularVotes(await getAngularVote());
+        setShowPopUp(true);
     }
 
     
@@ -54,10 +64,11 @@ function Home() {
                     <button type="button" onClick={initialProcess} className='font-bold border-2 w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white'>Connect Wallet</button>
                 </div>
             )}
-            {
-                
-            }
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+              <div className={!showwinner ? `hidden` :'flex flex-col justify-center items-center mt-12'}>
+                    <button type="button" onClick={handleVotes} className='font-bold border-2 w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white'>Show Votes</button>
+                    {showPopUp && <Popup react={parseInt(showReactVotes._hex, 16)} vue={parseInt(showVueVotes._hex, 16)} angular={parseInt(showAngularVotes._hex, 16)}/>}
+                </div>
+            <div className={ showwinner ? `hidden`:`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
                 {library.map((lib) => (
                     <Card key={lib.title} img={lib.img} title={lib.title} description={lib.description} myOption={lib.myOption} showwinner={setShowwinner} />
 
