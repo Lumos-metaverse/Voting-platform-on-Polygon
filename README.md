@@ -10,6 +10,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### - [Node.js](https://nodejs.org/)
 ### - [Npm](https://www.npmjs.com/)
+### - [Ganache](https://trufflesuite.com/ganache/)
+### - [Truffle](https://trufflesuite.com/)
 
 ## Installing
 
@@ -33,7 +35,6 @@ npm run start
 ### - [Node.js](https://nodejs.org/)
 ### - [npm](https://www.npmjs.com/)
 ### - [Solidity](https://docs.soliditylang.org/en/v0.8.17/)
-### - [Remix](https://remix.ethereum.org/)
 ### - [Polygon](https://www.polygon.technology/)
 
 ## Contributing
@@ -43,6 +44,21 @@ If you would like to contribute to the project, please follow these guidelines:
 1. Fork the repository
 2. Create a branch for your feature
 3. Submit a pull request for review
+
+## Ways To Contribute 
+
+There are many ways in which you can contribute. An example would be
+
+a) Enhancing the user interface 
+
+b) Expanding the chain 
+
+c) Using wallet connect instead of metamask injector to improve the user experience.
+
+## Sneak Peak
+
+![image](https://user-images.githubusercontent.com/28181759/207406865-52075cfb-d45c-4237-a29e-46116df1e865.png)
+![image](https://user-images.githubusercontent.com/28181759/207407948-ade69f33-8297-4846-86cf-8d9c2689d3b6.png)
 
 ## Authors
 Lumos Metaverse - [Lumos-metaverse](https://github.com/Lumos-metaverse)
