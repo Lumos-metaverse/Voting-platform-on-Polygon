@@ -55,6 +55,8 @@ b) Expanding the chain
 
 c) Using wallet connect instead of metamask injector to improve the user experience.
 
+Feel free to suggest a change.
+
 ## Sneak Peak
 
 ![image](https://user-images.githubusercontent.com/28181759/207406865-52075cfb-d45c-4237-a29e-46116df1e865.png)
