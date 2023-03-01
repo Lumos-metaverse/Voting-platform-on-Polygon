@@ -79,6 +79,14 @@ export const VotingProvider = ({children}) =>{
         const VotingContract =  getEthereumContract();
         return VotingContract.AngularVote();
     }
+    const getSvelteVote = () => {
+        const VotingContract=  getEthereumContract();
+        return VotingContract.SvelteVote();
+    }
+    const getBackBoneVote = () => {
+        const VotingContract = getEthereumContract();
+        return VotingContract.BackBoneVote();
+    }
 
 
     useEffect(() => {
@@ -89,7 +97,7 @@ export const VotingProvider = ({children}) =>{
     
 
     return(
-        <VotingContext.Provider value={{ getReactVote, getVueVote, getAngularVote, sendVote,connectWallet,option, setOption, currentAccount, givePermission, winner, setWinner}}>
+        <VotingContext.Provider value={{ getReactVote, getVueVote, getAngularVote,getSvelteVote, getBackBoneVote, sendVote,connectWallet,option, setOption, currentAccount, givePermission, winner, setWinner}}>
             {children}
         </VotingContext.Provider>
     )

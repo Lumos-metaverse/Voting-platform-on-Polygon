@@ -12,6 +12,8 @@ contract Voting{
     uint public ReactVote;
     uint public VueVote;
     uint public AngularVote;
+    uint public SvelteVote;
+    uint public BackBoneVote;
 
     address public chairperson;
 
@@ -20,12 +22,14 @@ contract Voting{
     string[] public candidates;
 
     constructor() public {
-        candidates =["React","Vue","Angular"];
+        candidates =["React","Vue","Angular", "Svelte", "BackBone"];
         chairperson = msg.sender;
         Voters[chairperson].weight = 1;
         ReactVote=0;
         VueVote=0;
         AngularVote=0;
+        SvelteVote=0;
+        BackBoneVote=0;
 
     }
 
@@ -48,20 +52,33 @@ contract Voting{
         else if (option==1) {
             VueVote++;
         }
-        else{
+        else if (option==2){
             AngularVote++;
         }
+        else if(option==3){
+            SvelteVote++;
+        }
+        else{
+            BackBoneVote++;
+        }
+
     }
 
     function winningCandidate() public view returns (string memory winningCandidate_){
-        if(ReactVote > VueVote && ReactVote > AngularVote){
+        if(ReactVote > VueVote && ReactVote > AngularVote && ReactVote > SvelteVote && ReactVote > BackBoneVote){
             winningCandidate_ = "React";
         }
-        else if(VueVote > ReactVote && VueVote > AngularVote){
+        else if(VueVote > ReactVote && VueVote > AngularVote && VueVote > SvelteVote && VueVote > BackBoneVote){
             winningCandidate_ = "Vue";
         }
-        else{
+        else if(AngularVote > ReactVote && AngularVote > VueVote && AngularVote > SvelteVote && AngularVote > BackBoneVote){
             winningCandidate_ = "Angular";
+        }
+        else if(SvelteVote > ReactVote && SvelteVote > VueVote && SvelteVote > AngularVote && SvelteVote > BackBoneVote){
+            winningCandidate_ = "Svelte";
+        }
+        else{
+            winningCandidate_ = "BackBone";
         }
     }
 
