@@ -42,7 +42,20 @@ const library = [
 ];
 
 function Home() {
-  const { getReactVote, getVueVote, getAngularVote, getSvelteVote, getBackBoneVote, connectWallet, currentAccount, sendVote, option, setOption, givePermission, winner } = useContext(VotingContext);
+  const {
+    getReactVote,
+    getVueVote,
+    getAngularVote,
+    getSvelteVote,
+    getBackBoneVote,
+    sendVote,
+    connectWallet,
+    option,
+    setOption,
+    currentAccount,
+    givePermission,
+    winner,
+  } = useContext(VotingContext);
 
   const [showwinner, setShowwinner] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
@@ -110,8 +123,8 @@ function Home() {
             react={parseInt(showReactVotes._hex, 16)}
             vue={parseInt(showVueVotes._hex, 16)}
             angular={parseInt(showAngularVotes._hex, 16)}
-            svelte={parseInt(showSvelteVotes._hex,16)}
-            backbone={parseInt(showBackBoneVotes._het,16)}
+            svelte={parseInt(showSvelteVotes._hex, 16)}
+            backbone={parseInt(showBackBoneVotes._het, 16)}
           />
         )}
       </div>
