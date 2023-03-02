@@ -9,6 +9,8 @@ export default function Popup(props) {
             <p className='bg-white p-5'>{`React Votes :- ${props.react} `}</p>
             <p className='bg-white p-5'>{`Vue Votes :- ${props.vue} `}</p>
             <p className='bg-white p-5'>{`Angular Votes :- ${props.angular} `}</p>
+            <p className='bg-white p-5'>{`Svelte Votes :- ${props.svelte} `}</p>
+            <p className='bg-white p-5'>{`BlackBone Votes :- ${props.blackbone} `}</p>
         </div>
     </div>
   )
