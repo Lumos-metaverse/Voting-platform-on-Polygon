@@ -1,86 +1,114 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.4.22 <0.9.0;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-contract Voting{
+contract Voting {
 
-    struct Voter{
-        uint weight;
+    struct Voter {
         bool voted;
         uint vote;
+        bool enrolled;
+        uint weight;
     }
 
-    uint public ReactVote;
-    uint public VueVote;
-    uint public AngularVote;
-    uint public SvelteVote;
-    uint public BackBoneVote;
+    struct Proposal {
+        string name;
+        uint voteCount;
+    }
 
     address public chairperson;
+    mapping(address => Voter) public voters;
+    Proposal[] public proposals;
+    uint public votingEndTime;
+    uint public quorumPercentage;
 
-    mapping(address => Voter) public Voters;
+    event VoteStarted(uint indexed endTime, uint quorumPercentage);
+    event Voterenrolled(address indexed voter);
+    event Voted(address indexed voter, uint indexed proposal, uint indexed voteCount);
+    event WinnerDeclared(string indexed proposalName, uint indexed voteCount);
+    event VotingEnded(uint indexed endTime);
 
-    string[] public candidates;
-
-    constructor() public {
-        candidates =["React","Vue","Angular", "Svelte", "BackBone"];
+    constructor(string[] memory proposalNames, uint duration, uint percentage) {
         chairperson = msg.sender;
-        Voters[chairperson].weight = 1;
-        ReactVote=0;
-        VueVote=0;
-        AngularVote=0;
-        SvelteVote=0;
-        BackBoneVote=0;
-
+        voters[chairperson].weight=1;
+        for (uint i = 0; i < proposalNames.length; i++) {
+            proposals.push(Proposal({
+                name: proposalNames[i],
+                voteCount: 0
+            }));
+        }
+        votingEndTime = block.timestamp + duration;
+        quorumPercentage = percentage;
+        emit VoteStarted(votingEndTime, quorumPercentage);
     }
 
-    function giveRight(address voter) public {
-        // require(msg.sender==chairperson, "Only chairperson can give right to vote");
-        require(!Voters[voter].voted, "The voter has already voted");
-        require(Voters[voter].weight==0);
-        Voters[voter].weight=1;
+    function6 register() public {
+        require(msg.sender != chairperson, "chairperson can only give right to vote.");
+        require(!voters[msg.sender].enrolled, "Voted already.");
+        require(voters[voter].weight == 0);
+        voters[voter].weight = 1;
+        voters[msg.sender].enrolled = true;
+        emit Voterenrolled(msg.sender);
     }
 
-    function vote(uint option) payable public {
-        Voter storage sender = Voters[msg.sender];
-        require(sender.weight != 0, "has no right to vote");
-        require(!sender.voted, "has already voted");
-        sender.voted=true;
-        sender.vote=option;
-        if(option==0){
-            ReactVote++;
-        }
-        else if (option==1) {
-            VueVote++;
-        }
-        else if (option==2){
-            AngularVote++;
-        }
-        else if(option==3){
-            SvelteVote++;
-        }
-        else{
-            BackBoneVote++;
-        }
-
+    function vote(uint proposal) public {
+        require(block.timestamp < votingEndTime, "end of voting time");
+        require(sender.weight != 0, "Has no right to vote");
+        require(voters[msg.sender].enrolled, "not enrolled to vote.");
+        require(!voters[msg.sender].voted, "voted already.");
+        voters[msg.sender].voted = true;
+        voters[msg.sender].vote = proposal;
+        proposals[proposal].voteCount++= sender.weight;
+        emit Voted(msg.sender, proposal, proposals[proposal].voteCount);
     }
 
-    function winningCandidate() public view returns (string memory winningCandidate_){
-        if(ReactVote > VueVote && ReactVote > AngularVote && ReactVote > SvelteVote && ReactVote > BackBoneVote){
-            winningCandidate_ = "React";
+    function declareWinner() public {
+        require(block.timestamp >= votingEndTime, "Voting is going on.");
+        uint totalVotes = 0;
+        for (uint i = 0; i < proposals.length; i++) {
+            totalVotes += proposals[i].voteCount;
         }
-        else if(VueVote > ReactVote && VueVote > AngularVote && VueVote > SvelteVote && VueVote > BackBoneVote){
-            winningCandidate_ = "Vue";
+        require(totalVotes > 0, "No votes casted as of now.");
+        uint quorum = (totalVotes * quorumPercentage) / 100;
+        uint winningProposal = 0;
+        uint winningVoteCount = 0;
+        for (uint i = 0; i < proposals.length; i++) {
+            if (proposals[i].voteCount > winningVoteCount) {
+                winningProposal = i;
+                winningVoteCount = proposals[i].voteCount;
+            }
         }
-        else if(AngularVote > ReactVote && AngularVote > VueVote && AngularVote > SvelteVote && AngularVote > BackBoneVote){
-            winningCandidate_ = "Angular";
-        }
-        else if(SvelteVote > ReactVote && SvelteVote > VueVote && SvelteVote > AngularVote && SvelteVote > BackBoneVote){
-            winningCandidate_ = "Svelte";
-        }
-        else{
-            winningCandidate_ = "BackBone";
-        }
+        require(winningVoteCount >= quorum, "Not satisfied Quorum .");
+        emit WinnerDeclared(proposals[winningProposal].name, winningVoteCount);
     }
+
+    function endVoting() public {
+        require(msg.sender == chairperson, "chairperson has the right to end the voting.");
+        require(block.timestamp >= votingEndTime, "Voting is going on.");
+        emit VotingEnded(votingEndTime);
+    }
+
+    function getProposalCount() public view returns (uint) {
+        return proposals.length;
+    }
+
+    function getProposal(uint index) public view returns (string memory, uint) {
+        require(index < proposals.length, " index out of bound.");
+        return (proposals[index].name, proposals[index].voteCount);
+    }
+
+    function hasVoted() public view returns (bool) {
+        return voters[msg.sender].voted;
+    }
+
+    function getVoterVote() public view returns (uint) {
+    require(voters[msg.sender].voted, "Hurry! go and vote.");
+    return voters[msg.sender].vote;
+}
+
+function isenrolled(address voter) public view returns (bool) {
+    return voters[voter].enrolled;
+}
+
 
 }
 
