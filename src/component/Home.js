@@ -132,7 +132,7 @@ function Home() {
         className={
           showwinner
             ? `hidden`
-            : `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+            : `flex flex-col mb-10 lg:flex-row flex-wrap justify-center gap-10`
         }
       >
         {library.map((lib) => (
