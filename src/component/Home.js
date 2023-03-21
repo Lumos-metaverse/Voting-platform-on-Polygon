@@ -2,6 +2,14 @@ import React, { useContext, useState } from "react";
 import Card from "./Card";
 import { VotingContext } from "../context/VotingContext";
 import Popup from "./Popup";
+import {
+  EthereumClient,
+  modalConnectors,
+  walletConnectProvider,
+} from "@web3modal/ethereum";
+import { Web3Button, Web3Modal, Web3NetworkSwitch } from "@web3modal/react";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { mainnet } from "wagmi/chains";
 
 const library = [
   {
@@ -70,6 +78,26 @@ function Home() {
     await givePermission();
   };
 
+  // for connecting wallets
+  const projectId = "720630d25f0f3d66ac27243a1c5437ed";
+  const chains = [mainnet];
+  const { provider } = configureChains(chains, [
+    walletConnectProvider({ projectId }),
+  ]);
+
+  const wagmiClient = createClient({
+    autoConnect: true,
+    connectors: modalConnectors({
+      version: "1",
+      appName: "voting platform - Lumos",
+      chains,
+      projectId,
+    }),
+    provider,
+  });
+
+  const ethereumClient = new EthereumClient(wagmiClient, chains);
+
   const handleVotes = async () => {
     setShowReactVotes(await getReactVote());
     setShowVueVotes(await getVueVote());
@@ -84,26 +112,21 @@ function Home() {
       <h1 className="text-4xl font-bold text-center py-6">
         Vote for Your Favourite JS Library
       </h1>
-      {currentAccount ? (
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="text-2xl font-bold text-center py-4">
-            Connected with {currentAccount}
-          </h1>
-        </div>
-      ) : (
-        <div className="flex flex-col justify-center items-center">
-          <h1 className="text-2xl font-bold text-center pb-4">
-            Connect Wallet to Vote
-          </h1>
-          <button
-            type="button"
-            onClick={initialProcess}
-            className="font-bold border-2 w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white"
-          >
-            Connect Wallet
-          </button>
-        </div>
-      )}
+
+      {/* button for wallet  */}
+      <div className="flex flex-col justify-center items-center">
+        <WagmiConfig client={wagmiClient}>
+          <Web3Button />
+        </WagmiConfig>
+
+        <Web3Modal
+          projectId={projectId}
+          ethereumClient={ethereumClient}
+          themeBackground={"gradient"}
+          themeColor={"orange"}
+        />
+      </div>
+
       <div
         className={
           !showwinner
@@ -132,7 +155,7 @@ function Home() {
         className={
           showwinner
             ? `hidden`
-            : `flex flex-col mb-10 lg:flex-row flex-wrap justify-center gap-10`
+            : `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
         }
       >
         {library.map((lib) => (
