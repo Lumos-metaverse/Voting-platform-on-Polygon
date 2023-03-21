@@ -155,11 +155,12 @@ function Home() {
         className={
           showwinner
             ? `hidden`
-            : `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+            : `flex flex-col mb-10 lg:flex-row flex-wrap lg:items-stretch items-center justify-center gap-10`
         }
       >
-        {library.map((lib) => (
+        {library.map((lib, idx) => (
           <Card
+            idx={idx + 1}
             key={lib.title}
             img={lib.img}
             title={lib.title}
