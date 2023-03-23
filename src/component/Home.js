@@ -158,9 +158,9 @@ function Home() {
             : `flex flex-col mb-10 lg:flex-row flex-wrap lg:items-stretch items-center justify-center gap-10`
         }
       >
-        {library.map((lib, idx) => (
+        {library.map((lib, index) => (
           <Card
-            idx={idx + 1}
+            idx={index + 1}
             key={lib.title}
             img={lib.img}
             title={lib.title}
