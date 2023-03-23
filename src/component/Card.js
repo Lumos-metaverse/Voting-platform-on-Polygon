@@ -13,7 +13,7 @@ function Card({ img, title, description, myOption, showwinner, idx }) {
       onMouseLeave={() => setswipe(true)}
       class={`flex flex-col ${
         swipe ? "justify-center shadow-none" : "shadow-lg"
-      } w-[90%] lg:w-[40%] md:flex-row bg-white shadow-lg rounded-lg mt-4 transition-all duration-700 ease-in-out`}
+      } w-[90%] lg:w-[40%] md:flex-row bg-white rounded-lg mt-4 transition-all duration-700 ease-in-out`}
     >
       <div
         class={`max-h-full ${
