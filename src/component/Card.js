@@ -1,24 +1,67 @@
-import React, {useEffect, useState, useContext} from 'react';
-import { VotingContext } from '../context/VotingContext'
+import React, { useEffect, useState, useContext } from "react";
+import { VotingContext } from "../context/VotingContext";
 
-
-function Card({ img, title, description, myOption, showwinner }) {
-
-  const {connectWallet, clickHandler, setWinner, winner, sendVote} = useContext(VotingContext)
-  const [data, setData] = useState("")
-
-  
-
+function Card({ img, title, description, myOption, showwinner, idx }) {
+  const { connectWallet, clickHandler, setWinner, winner, sendVote } =
+    useContext(VotingContext);
+  const [data, setData] = useState("");
+  const [swipe, setswipe] = useState(true);
 
   return (
-    <div className='border p-4 rounded-md flex flex-col justify-between items-center shadow-md my-8 w-4/5 mx-auto'>
-      <img src={img} alt="" className='rounded-md' />
-      <h1 className='font-bold text-xl py-2'>{title}</h1>
-      <p className='font-medium text-center py-2'>{description}</p>
-      
-      <button className='font-bold border w-fit px-4 py-2 rounded-md text-lg transition duration-300 hover:bg-gray-600 hover:text-white' onClick={(e)=>{setData(myOption);showwinner(true);setWinner(myOption); sendVote(myOption)}}>Vote</button>
+    <div
+      onMouseEnter={() => setswipe(false)}
+      onMouseLeave={() => setswipe(true)}
+      class={`flex flex-col ${
+        swipe ? "justify-center shadow-none" : "shadow-lg"
+      } w-[90%] lg:w-[40%] md:flex-row bg-white rounded-lg mt-4 transition-all duration-700 ease-in-out`}
+    >
+      <div
+        class={`max-h-full ${
+          swipe ? "z-50" : "z-0"
+        } w-auto md:w-1/2 flex justify-center lg:w-full transition-all duration-700 ease-in-out`}
+      >
+        <img
+          class={`inset-0 ${
+            swipe
+              ? idx % 2 === 0
+                ? "rounded-lg lg:ml-[200px]"
+                : "rounded-lg lg:ml-[300px]"
+              : "rounded-l-lg"
+          } h-full w-full object-cover object-center transition duration-700 ease-in-out hover:scale-110`}
+          src={img}
+        />
+      </div>
+      <div
+        class={`lg:w-1/2 py-4 px-6 ${
+          swipe ? "lg:text-white" : "text-gray-800"
+        } lg:relative ${
+          swipe ? "lg:-left-80" : "lg:left-0"
+        } flex flex-col justify-between transition-all duration-700 ease-in-out`}
+      >
+        <h3 class="font-semibold text-lg text-center leading-tight truncate">
+          {title}
+        </h3>
+        <p class="mt-2">{description}</p>
+        <div class="flex justify-center items-center my-5">
+          <button
+            onClick={(e) => {
+              setData(myOption);
+              showwinner(true);
+              setWinner(myOption);
+              sendVote(myOption);
+            }}
+            class={`bg-transparent hover:bg-blue-500 ${
+              swipe ? "lg:text-white" : "text-blue-700"
+            } font-semibold hover:text-white py-2 px-24 border ${
+              swipe ? "lg:border-white" : "border-blue-500"
+            } hover:border-transparent rounded transition-all border-blue-500 text-blue-700 duration-700 ease-in-out`}
+          >
+            Vote
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Card
+export default Card;
