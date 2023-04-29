@@ -72,6 +72,11 @@ function Home() {
   const [showAngularVotes, setShowAngularVotes] = useState();
   const [showSvelteVotes, setShowSvelteVotes] = useState();
   const [showBackBoneVotes, setShowBackBoneVotes] = useState();
+  const[darkMode, setDarkMode] = useState(false);
+
+  const handleDarkModeToggle = () => {
+    setDarkMode(!darkMode);
+  };
 
   const initialProcess = async () => {
     await connectWallet();
@@ -108,7 +113,15 @@ function Home() {
   };
 
   return (
-    <div className="flex flex-col justify-center bg">
+    <div className={`flex flex-col justify-center bg ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+      <div className="flex justify-end pr-4 pt-4">
+        <button
+          className={`p-2 rounded-full ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}
+          onClick={handleDarkModeToggle}
+        >
+          {darkMode ? 'Light' : 'Dark'} Mode
+        </button>
+      </div>
       <h1 className="text-4xl font-bold text-center py-6">
         Vote for Your Favourite JS Library
       </h1>
@@ -167,6 +180,7 @@ function Home() {
             description={lib.description}
             myOption={lib.myOption}
             showwinner={setShowwinner}
+            darkMode={darkMode}
           />
         ))}
       </div>
