@@ -6,14 +6,16 @@ export const VotingContext = React.createContext();
 
 const { ethereum } = window;
 
-const getEthereumContract = () => {
+const getEthereumContract = async () => {
 	const provider = new ethers.providers.Web3Provider(ethereum);
-	const signer = provider.getSigner();
+	const signer = await  provider.getSigner();
+	console.log(signer)
 	const VotingContract = new ethers.Contract(
 		VOTING_ADDRESS,
 		VOTING_ABI,
 		signer
 	);
+	console.log(VotingContract)
 	return VotingContract;
 };
 

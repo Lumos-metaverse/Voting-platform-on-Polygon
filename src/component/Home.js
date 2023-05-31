@@ -9,7 +9,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Button, Web3Modal, Web3NetworkSwitch } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { polygonMumbai  } from "wagmi/chains";
 
 const library = [
   {
@@ -80,7 +80,7 @@ function Home() {
 
   // for connecting wallets
   const projectId = "720630d25f0f3d66ac27243a1c5437ed";
-  const chains = [mainnet];
+  const chains = [polygonMumbai];
   const { provider } = configureChains(chains, [
     walletConnectProvider({ projectId }),
   ]);
