@@ -5,7 +5,7 @@ import { VOTING_ABI, VOTING_ADDRESS } from "../utils/constants";
 export const VotingContext = React.createContext();
 
 const { ethereum } = window;
-
+console.log(VOTING_ABI);console.log(VOTING_ADDRESS);
 const getEthereumContract = async () => {
 	const provider = new ethers.providers.Web3Provider(ethereum);
 	const signer = await  provider.getSigner();
@@ -31,32 +31,65 @@ export const VotingProvider = ({ children }) => {
 			const accounts = await ethereum.request({
 				method: "eth_requestAccounts",
 			});
+			console.log(accounts[0]);
 			setcurrentAccount(accounts[0]);
 			// window.location.reload();
 		} catch (error) {
 			console.log(error);
 			throw new error("No ethereum object");
 		}
+		
 	};
+	const checkifWalletConnected=async()=>{
+        try{
+            if(!window.ethereum){
+                return "Install Metamask";
+            }
+            const accounts=await window.ethereum.request({
+                method:"eth_accounts",
+            });
+
+            if(accounts.length){
+				setcurrentAccount(accounts[0]);
+            }
+            else{
+                return "No Account";
+            }
+
+        }
+        catch(e){
+           return "not Connected";
+        }
+    };
+	useEffect(()=>{
+        checkifWalletConnected();
+    },[ethereum]);
 
 	const givePermission = async () => {
 		try {
 			if (!ethereum) return alert("Please connect to a metamask wallet");
-			const VotingContract = getEthereumContract();
-			VotingContract.giveRight(currentAccount);
+			const VotingContract = await getEthereumContract();
+			console.log(VotingContract);
+			console.log(currentAccount);
+			await VotingContract.giveRight(currentAccount);
 			console.log("Permission given");
 			// window.location.reload();
 		} catch (error) {
 			console.log(error);
-			throw new error("No ethereum object");
+			// throw new error("No ethereum object");
 		}
 	};
 
 	const sendVote = async (option) => {
-		if (!ethereum) return alert("Please connect to a metamask wallet");
-		const VotingContract = getEthereumContract();
-		const VoteHash = await VotingContract.vote(option);
-		console.log(VoteHash);
+		try{
+			if (!ethereum) return alert("Please connect to a metamask wallet");
+			const VotingContract = await getEthereumContract();
+			const VoteHash = await VotingContract.vote(option,{gasLimit:300000,});
+		}
+		catch(e){
+			console.log(e);
+		}
+		// console.log(VoteHash);
 	};
 
 	const getWinner = async () => {
@@ -67,25 +100,25 @@ export const VotingProvider = ({ children }) => {
 		console.log(winner);
 	};
 
-	const getReactVote = () => {
-		const VotingContract = getEthereumContract();
-		return VotingContract.ReactVote();
+	const getReactVote =async() => {
+		const VotingContract = await getEthereumContract();
+		return await VotingContract.ReactVote();
 	};
 
-	const getVueVote = () => {
-		const VotingContract = getEthereumContract();
+	const getVueVote =async () => {
+		const VotingContract = await getEthereumContract();
 		return VotingContract.VueVote();
 	};
-	const getAngularVote = () => {
-		const VotingContract = getEthereumContract();
+	const getAngularVote =async () => {
+		const VotingContract =await getEthereumContract();
 		return VotingContract.AngularVote();
 	};
-	const getSvelteVote = () => {
-		const VotingContract = getEthereumContract();
+	const getSvelteVote=async()=>{
+		const VotingContract =await getEthereumContract();
 		return VotingContract.SvelteVote();
 	};
-	const getBackBoneVote = () => {
-		const VotingContract = getEthereumContract();
+	const getBackBoneVote =async () => {
+		const VotingContract =await  getEthereumContract();
 		return VotingContract.BackBoneVote();
 	};
 
