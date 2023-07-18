@@ -100,7 +100,7 @@ function Home() {
 
   const handleVotes = async () => {
     const vote=await getReactVote();
-    console.log("hekk");
+  
     setShowReactVotes(await getReactVote());
     setShowVueVotes(await getVueVote());
     setShowAngularVotes(await getAngularVote());
