@@ -99,13 +99,17 @@ function Home() {
   const ethereumClient = new EthereumClient(wagmiClient, chains);
 
   const handleVotes = async () => {
+    const vote=await getReactVote();
+  
     setShowReactVotes(await getReactVote());
     setShowVueVotes(await getVueVote());
     setShowAngularVotes(await getAngularVote());
     setShowSvelteVotes(await getSvelteVote());
     setShowBackBoneVotes(await getBackBoneVote());
     setShowPopUp(true);
+    
   };
+
 
   return (
     <div className="flex flex-col justify-center bg">
@@ -114,8 +118,8 @@ function Home() {
       </h1>
 
       {/* button for wallet  */}
-      <div className="flex flex-col justify-center items-center">
-        <WagmiConfig client={wagmiClient}>
+      <div className="flex flex-col justify-center items-center" >
+        <WagmiConfig client={wagmiClient} onClick={()=>connectWallet()}>
           <Web3Button />
         </WagmiConfig>
 
@@ -147,7 +151,7 @@ function Home() {
             vue={parseInt(showVueVotes._hex, 16)}
             angular={parseInt(showAngularVotes._hex, 16)}
             svelte={parseInt(showSvelteVotes._hex, 16)}
-            backbone={parseInt(showBackBoneVotes._het, 16)}
+            backbone={parseInt(showBackBoneVotes._hex, 16)}
           />
         )}
       </div>
@@ -158,7 +162,7 @@ function Home() {
             : `flex flex-col mb-10 lg:flex-row flex-wrap lg:items-stretch items-center justify-center gap-10`
         }
       >
-        {library.map((lib, index) => (
+        {library?.map((lib, index) => (
           <Card
             idx={index + 1}
             key={lib.title}
